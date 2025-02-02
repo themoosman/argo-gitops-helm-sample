@@ -1,0 +1,15 @@
+{{- if .Values.api.useCustomCert -}}
+apiVersion: config.openshift.io/v1
+kind: APIServer
+metadata:
+  name: cluster
+spec:
+  servingCerts:
+    namedCertificates:
+    - names:
+      - {{ .Values.api.namedCertName }}
+      servingCertificate:
+        name: {{ .Values.api.certSecretName }}
+  audit:
+    profile: {{ .Values.api.auditProfile }}
+{{- end -}}

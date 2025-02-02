@@ -1,0 +1,26 @@
+
+api:
+  useCustomCert: false
+  certSecretName: myapicert
+  auditProfile: Default
+  namedCertName: api.foo.bar
+
+cluster:
+  ocp_version: '4.17'
+  banner:
+    text: UPDATE ME
+    bgColor: '#ee0000'
+  
+ingress:
+  replicas: 3
+  certSecretName: ingresscert
+  useCustomCert: false
+  useInfraNodes: false
+
+monitoring:
+  enabled: false
+  useInfraNodes: false
+  useAlertManagerConfig: false
+  alertManagerStorage: 40Gi
+  prometheusStorage: 120Gi
+  prometheusRetention: 1w

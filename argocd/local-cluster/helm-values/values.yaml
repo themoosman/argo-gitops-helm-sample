@@ -1,0 +1,3 @@
+cluster:
+  banner:
+    text: 'My OpenShift Cluster!'

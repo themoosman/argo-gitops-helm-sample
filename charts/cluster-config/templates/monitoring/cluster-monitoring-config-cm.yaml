@@ -1,0 +1,136 @@
+{{- if .Values.monitoring.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+data:
+  config.yaml: |+
+    enableUserWorkload: false
+    alertmanagerMain:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+      volumeClaimTemplate:
+        metadata: {}
+        spec:
+          resources:
+            requests:
+              storage: {{ .Values.monitoring.alertManagerStorage }}
+        status: {}
+    kubeStateMetrics:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+    monitoringPlugin:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+    nodeExporter:
+      collectors:
+        buddyinfo: {}
+        cpufreq: {}
+        ksmd: {}
+        mountstats: {}
+        netclass: {}
+        netdev: {}
+        processes: {}
+        systemd: {}
+        tcpstat: {}
+    openshiftStateMetrics:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+    prometheusK8s:
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      retention: {{ .Values.monitoring.prometheusRetention }}
+      {{- if .Values.monitoring.useInfraNodes }}
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+      volumeClaimTemplate:
+        metadata: {}
+        spec:
+          resources:
+            requests:
+              storage: {{ .Values.monitoring.prometheusStorage }}
+        status: {}
+    prometheusOperator:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+    prometheusOperatorAdmissionWebhook: {}
+    telemeterClient:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+    thanosQuerier:
+      {{- if .Values.monitoring.useInfraNodes }}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        value: reserved
+      {{- end }}
+{{- end -}}
